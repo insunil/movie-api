@@ -4,11 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"module/model"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -20,11 +23,15 @@ const collname = "watchlist"
 var collection *mongo.Collection
 
 func init() {
-
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("error")
+	}
+	var connectstr = os.Getenv("connectionstring")
 	context, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	clientoption := options.Client().ApplyURI("mongodb+srv://sunil:sunil@cluster0.bzpjx.mongodb.net/")
+	clientoption := options.Client().ApplyURI(connectstr)
 	client, _ := mongo.Connect(context, clientoption)
 	collection = client.Database(dbname).Collection(collname)
 	fmt.Println("controller")
