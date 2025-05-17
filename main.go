@@ -7,9 +7,7 @@ import (
 )
 
 func main() {
-
-	r := router.Router()
+    r := router.Router()
+	fmt.Println("Started server")
 	http.ListenAndServe(":4000", r)
-	fmt.Println("Started")
-
 }
